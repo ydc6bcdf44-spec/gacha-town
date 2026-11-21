@@ -257,6 +257,11 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
 
 /* New illustrated home is the only gacha screen; retain inventory and trade pages */
 body.dream-home #app{display:none!important}
+body.dream-home .subpage-nav{display:none!important}
+.subpage-nav{text-align:center;margin:0 0 15px}
+.subpage-nav button{padding:13px 25px;border-radius:99px;border:3px solid white;background:linear-gradient(#f8b2d7,#d18fca);color:white;font-weight:900;box-shadow:0 5px 0 #b06c9d,0 9px 18px #a45e8d44;transition:transform .15s}
+.subpage-nav button:active{transform:translateY(4px);box-shadow:0 1px 0 #b06c9d}
+
 .dream-toolbar{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;background:linear-gradient(90deg,#f7d5ed,#fdf0fb,#dfd2f4);padding:12px;color:#94587e;font-weight:900;border-top:2px solid white}
 .dream-toolbar button{border:2px solid #fff8ff;border-radius:99px;padding:9px 15px;color:#985782;background:linear-gradient(#fffdfd,#ffe3f4);box-shadow:0 3px 8px #9f66932d;font-weight:900}
 .dream-toolbar button:hover{filter:brightness(1.05);transform:translateY(-1px)}
@@ -336,7 +341,7 @@ body:not(.dream-home) .tabs{display:flex}
 <button class="dream-hit" style="left:41%;top:88%;width:14%;height:10%" data-dream="video" aria-label="動画報酬は準備中"></button>
 <button class="dream-hit" style="left:55%;top:88%;width:14%;height:10%" data-dream="missions" aria-label="ミッションは準備中"></button>
 <button class="dream-hit" style="left:84%;top:88%;width:15%;height:10%" data-dream="bonus" aria-label="ガチャ5回ボーナスの説明"></button>
-<div class="dream-toolbar"><button type="button" id="dreamSound" aria-label="効果音の切り替え">♪ 音 ON</button><span id="dreamProgress">コレクション 0 / 44</span><button type="button" id="dreamCollection">♡ 図鑑を見る</button></div><div class="dream-selection" aria-label="ガチャシリーズ選択"><span class="dream-selection-label">♡ ガチャシリーズを選ぶ ♡</span><div id="dreamSeries"></div></div><div class="dream-status" id="dreamStatus" aria-live="polite"></div><div class="dream-capsule-fx" id="dreamCapsuleFx" aria-hidden="true"><span></span></div></section><main id="app"></main>
+<div class="dream-toolbar"><button type="button" id="dreamSound" aria-label="効果音の切り替え">♪ 音 ON</button><span id="dreamProgress">コレクション 0 / 44</span><button type="button" id="dreamCollection">♡ 図鑑を見る</button></div><div class="dream-selection" aria-label="ガチャシリーズ選択"><span class="dream-selection-label">♡ ガチャシリーズを選ぶ ♡</span><div id="dreamSeries"></div></div><div class="dream-status" id="dreamStatus" aria-live="polite"></div><div class="dream-capsule-fx" id="dreamCapsuleFx" aria-hidden="true"><span></span></div></section><div class="subpage-nav" id="subpageNav"><button type="button" id="backDream">♡ ガチャタウンにもどる</button></div><main id="app"></main>
 </div>
 <div id="overlay" class="overlay" role="dialog" aria-modal="true">
  <div class="modal" id="modal"></div>
@@ -599,6 +604,7 @@ function reward(){
  }
  $("ok").onclick=closeModal;
 }
+document.getElementById("backDream").addEventListener("click",()=>{showPage("gacha");window.scrollTo({top:0,behavior:"smooth"});});
 document.getElementById("dreamSound").addEventListener("click",()=>{audioOn=!audioOn;if(audioOn)tone(720,.12);render();});
 document.getElementById("dreamCollection").addEventListener("click",()=>{showPage("collection");$("app").scrollIntoView({behavior:"smooth",block:"start"});});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("overlay").classList.contains("show")&&!busy)closeModal();});
