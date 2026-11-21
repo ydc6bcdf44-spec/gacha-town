@@ -1,1 +1,445 @@
 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8d9e7">
+<title>GACHA TOWN</title>
+<style>
+*{box-sizing:border-box}
+:root{
+ --pink:#ed8fb4;--dark:#78536a;--cream:#fffaf5;
+ --blue:#b8e8f1;--purple:#d6b8ed;--line:#efd6e2
+}
+body{
+ margin:0;color:var(--dark);font-family:system-ui,"Yu Gothic",sans-serif;
+ background:linear-gradient(145deg,#fce5ef,#e6f5fc 55%,#f9e7ff);
+ min-height:100dvh
+}
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.5;cursor:not-allowed}
+header{
+ display:flex;align-items:center;justify-content:space-between;
+ padding:12px 18px;background:#fff9;
+ border-bottom:2px solid white;gap:10px
+}
+.logo{font-size:clamp(19px,4vw,27px);font-weight:1000;color:#d875a2;letter-spacing:1px}
+.wallet{background:white;border:2px solid #f1cfdd;border-radius:30px;padding:9px 13px;font-weight:900}
+.shell{max-width:1100px;margin:auto;padding:18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+.tab,.btn{
+ border:2px solid #e9bfd2;border-radius:18px;padding:12px 18px;
+ background:white;color:var(--dark);font-weight:900;
+ box-shadow:0 4px 0 #dfb7c9
+}
+.tab.active,.primary{background:var(--pink);color:white;border-color:#e17fa8}
+.tab:active,.btn:active{transform:translateY(3px);box-shadow:none}
+.panel{
+ background:#fffc;border:2px solid white;border-radius:27px;
+ padding:20px;box-shadow:0 12px 35px #aa729225
+}
+h1,h2,h3{text-align:center;margin:8px 0 14px}
+h1{font-size:clamp(23px,5vw,35px);color:#d67ba3}
+.sub{text-align:center;font-size:13px;opacity:.8}
+.series{
+ display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0
+}
+.series button{
+ border:2px solid #f0d3e0;border-radius:18px;background:white;
+ padding:12px 5px;color:var(--dark);font-weight:900
+}
+.series button.selected{background:#fce0eb;border-color:#df83ad}
+.series .symbol{display:block;font-size:27px;margin-bottom:4px}
+.game{
+ display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center
+}
+.machine-area{
+ min-height:430px;display:flex;align-items:center;
+ justify-content:center;position:relative;
+ background:radial-gradient(ellipse,#fff 10%,#ffe6f0 65%,#f9d5e7);
+ border-radius:25px;overflow:hidden
+}
+.machine{
+ width:250px;max-width:90%;filter:drop-shadow(8px 15px 7px #b66a8b40);
+ position:relative;transform-origin:center bottom
+}
+.machine.shake{animation:shake .55s ease-in-out}
+@keyframes shake{
+ 0%,100%{transform:rotate(0)}
+ 20%{transform:rotate(-3deg)}
+ 40%{transform:rotate(3deg)}
+ 60%{transform:rotate(-2deg)}
+ 80%{transform:rotate(2deg)}
+}
+.globe{
+ height:235px;border:11px solid #e99aba;border-radius:48% 48% 28% 28%;
+ background:linear-gradient(120deg,#ffffffa0,#d2f7ff88);
+ box-shadow:inset 9px 5px 18px #fff,0 5px 0 #c46b98;
+ position:relative;overflow:hidden
+}
+.globe:after{
+ content:"";position:absolute;left:18px;top:12px;
+ width:35px;height:120px;border-radius:50%;
+ background:#ffffff65;transform:rotate(22deg)
+}
+.balls{position:absolute;bottom:5px;left:8px;right:8px;height:140px}
+.ball{
+ width:65px;height:65px;position:absolute;border-radius:50%;
+ border:3px solid #ffffff99;
+ box-shadow:inset -8px -9px 12px #0002,inset 6px 7px 9px #fff9
+}
+.ball:after{
+ content:"";position:absolute;top:48%;width:100%;height:3px;background:#fff9
+}
+.base{
+ height:178px;background:linear-gradient(90deg,#e991b5,#ffd2e5,#d978a3);
+ border:9px solid #d77aa4;border-radius:16px 16px 28px 28px;
+ position:relative;text-align:center;padding-top:13px
+}
+.brand{background:#fff7;border-radius:9px;padding:6px;font-size:14px;font-weight:1000}
+.handle{
+ width:68px;height:68px;border:11px solid #fff1f6;
+ border-radius:50%;background:#b875a0;position:absolute;
+ left:24px;top:67px;box-shadow:0 4px 0 #a85b88
+}
+.handle:before,.handle:after{
+ content:"";position:absolute;background:#ffeaf4;border-radius:9px
+}
+.handle:before{width:60px;height:13px;left:-7px;top:17px}
+.handle:after{height:60px;width:13px;left:17px;top:-7px}
+.handle.spin{animation:spin .9s ease-in-out}
+@keyframes spin{to{transform:rotate(720deg)}}
+.slot{
+ position:absolute;right:22px;top:80px;width:72px;height:67px;
+ background:#98617f;border:8px solid #ffe3ef;border-radius:15px;
+ box-shadow:inset 0 9px 8px #573348
+}
+.machine-foot{height:15px;background:#bd6e97;border-radius:0 0 20px 20px;margin:0 22px}
+.controls{text-align:center}
+.price{font-size:30px;font-weight:1000;color:#d37ba5}
+.bigbtn{
+ display:block;width:100%;max-width:340px;margin:18px auto;
+ border:0;border-radius:22px;padding:17px;
+ background:linear-gradient(#f3a7c6,#df79a6);
+ color:white;font-size:20px;font-weight:1000;
+ box-shadow:0 7px 0 #bc5b8b
+}
+.bigbtn:active{transform:translateY(5px);box-shadow:0 2px 0 #bc5b8b}
+.note{font-size:13px;line-height:1.8;opacity:.85}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:13px}
+.item{
+ background:white;border:2px solid #f2d6e3;border-radius:20px;
+ padding:12px;text-align:center;position:relative
+}
+.art{
+ height:125px;border-radius:15px;display:flex;
+ align-items:center;justify-content:center;
+ background:linear-gradient(135deg,#fff0f6,#e6f7fc);
+ margin-bottom:9px
+}
+.art svg{width:112px;height:112px;filter:drop-shadow(2px 5px 3px #8a6a8a33)}
+.item strong{display:block;font-size:13px}
+.item small{display:block;margin:5px 0}
+.item button{padding:8px 12px;border-radius:12px;border:1px solid #e4b4cc;background:#ffe5ef;color:#a35a7d;font-weight:bold}
+.locked .art{filter:grayscale(1);opacity:.3}
+.locked strong{opacity:.4}
+.progress{height:14px;background:#f1dce7;border-radius:20px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;background:linear-gradient(90deg,#e9a2c2,#bca4e9);transition:width .3s}
+.overlay{
+ position:fixed;inset:0;background:#53354eaa;z-index:20;
+ display:none;align-items:center;justify-content:center;padding:18px
+}
+.overlay.show{display:flex}
+.modal{
+ width:min(420px,100%);background:#fff9fc;border:5px solid white;
+ border-radius:30px;padding:25px;text-align:center;
+ box-shadow:0 20px 70px #44243e66
+}
+.capsule{
+ width:145px;height:145px;margin:20px auto;border-radius:50%;
+ background:linear-gradient(#ffb4d3 0 49%,#fff4f9 50%);
+ border:7px solid #fff;box-shadow:inset -12px -12px 20px #b86a9244,0 10px 20px #bd7b9a55;
+ animation:bounce .8s infinite alternate
+}
+@keyframes bounce{to{transform:translateY(-16px) rotate(9deg)}}
+.reveal{animation:pop .5s both}
+@keyframes pop{from{opacity:0;transform:scale(.3) rotate(-12deg)}to{opacity:1;transform:scale(1)}}
+.hidden{display:none!important}
+.notice{background:#fff3fa;border:2px dashed #e6aac7;padding:18px;border-radius:18px;text-align:center;line-height:1.8}
+footer{text-align:center;padding:22px;font-size:12px;opacity:.65}
+@media(max-width:700px){
+ .shell{padding:10px}
+ .panel{padding:13px;border-radius:20px}
+ .game{grid-template-columns:1fr;gap:10px}
+ .machine-area{min-height:340px}
+ .machine{transform:scale(.78);margin:-30px 0}
+ .machine.shake{animation:shake .55s}
+ .series{grid-template-columns:repeat(2,1fr)}
+ .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+ .tab{font-size:12px;padding:11px 2px;border-radius:12px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .art{height:110px}
+ .logo{font-size:19px}
+ .wallet{font-size:12px;padding:8px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">GACHA TOWN ♡</div>
+ <div class="wallet">✦ <span id="coins">1500</span> coins</div>
+</header>
+<div class="shell">
+ <nav class="tabs">
+  <button class="tab active" data-page="gacha">ガチャ</button>
+  <button class="tab" data-page="collection">図鑑</button>
+  <button class="tab" data-page="sell">売却</button>
+  <button class="tab" data-page="trade">交換所</button>
+ </nav>
+ <main id="app"></main>
+</div>
+<div id="overlay" class="overlay" role="dialog" aria-modal="true">
+ <div class="modal" id="modal"></div>
+</div>
+<footer>GACHA TOWN · Collection & Trading Game</footer>
+<script>
+"use strict";
+const KEY="gacha-town-save-v1";
+const SERIES=[
+ {name:"いちごうさぎ",icon:"♡",color:"#f4a2bc",count:12,kind:"bunny"},
+ {name:"ゆめかわおばけ",icon:"✧",color:"#bba5e9",count:10,kind:"ghost"},
+ {name:"喫茶店",icon:"✿",color:"#e7bd91",count:12,kind:"dessert"},
+ {name:"星空ねこ",icon:"★",color:"#93bfe9",count:10,kind:"cat"}
+];
+const NAMES={
+ bunny:["いちごミルク","おひるね","リボン","おさんぽ","マカロン","さくら","おめかし","ふわふわ","ハート","いちご姫","きらめき","秘密のうさぎ"],
+ ghost:["ふわり","おやすみ","キャンディ","なみだ","おほしさま","いたずら","リボン","月夜","まぼろし","秘密のおばけ"],
+ dessert:["プリン","クリームソーダ","ショートケーキ","パフェ","ドーナツ","ホットケーキ","カップケーキ","ココア","ゼリー","いちごタルト","夢のパフェ","秘密の喫茶"],
+ cat:["おひるね","流れ星","おつきさま","リボン","雲の上","夜空","天使","星の王子","銀河","秘密のねこ"]
+};
+const RARITIES=[
+ {name:"ノーマル",weight:55,color:"#9a9aab",sell:80},
+ {name:"レア",weight:28,color:"#63a7df",sell:180},
+ {name:"スーパーレア",weight:12,color:"#b27bdc",sell:450},
+ {name:"ウルトラレア",weight:4,color:"#e8ad49",sell:1100},
+ {name:"シークレット",weight:1,color:"#ed73ad",sell:3000}
+];
+const ITEMS=[];
+SERIES.forEach((s,si)=>{
+ for(let i=0;i<s.count;i++){
+  let r=i===s.count-1?4:i>=s.count-3?3:i>=s.count-5?2:i>=s.count-8?1:0;
+  ITEMS.push({id:si+"-"+i,series:si,index:i,name:NAMES[s.kind][i],rarity:r});
+ }
+});
+const fresh=()=>({coins:1500,owned:{},discovered:{},total:0,lastReward:""});
+let state;
+try{
+ const saved=JSON.parse(localStorage.getItem(KEY));
+ state=saved&&typeof saved==="object"&&Number.isFinite(saved.coins)&&saved.coins>=0&&saved.owned&&saved.discovered?{...fresh(),...saved}:fresh();
+}catch(e){state=fresh()}
+let page="gacha",selected=0,busy=false,audioOn=false,ctx=null;
+const $=id=>document.getElementById(id);
+const fmt=n=>Number(n).toLocaleString("ja-JP");
+const count=id=>Math.max(0,Number(state.owned[id])||0);
+function save(){
+ try{localStorage.setItem(KEY,JSON.stringify(state))}
+ catch(e){console.warn("保存できませんでした",e)}
+ $("coins").textContent=fmt(state.coins);
+}
+function tone(freq=500,duration=.12,type="sine"){
+ if(!audioOn)return;
+ try{
+  ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();
+  const o=ctx.createOscillator(),g=ctx.createGain();
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(.045,ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+  o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration);
+ }catch(e){}
+}
+function soundWin(){[520,660,790,1050].forEach((n,i)=>setTimeout(()=>tone(n,.16),i*110))}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function weightedItem(si){
+ const pool=ITEMS.filter(x=>x.series===si);
+ const total=pool.reduce((a,x)=>a+RARITIES[x.rarity].weight,0);
+ let v=Math.random()*total;
+ for(const item of pool){
+  v-=RARITIES[item.rarity].weight;
+  if(v<0)return item;
+ }
+ return pool[pool.length-1];
+}
+function svgArt(item){
+ const s=SERIES[item.series],hue=(item.index*37)%360;
+ const accent=`hsl(${hue} 70% 78%)`;
+ const main=s.color;
+ const head=item.series===0?
+ `<ellipse cx="38" cy="29" rx="12" ry="27" fill="${main}" stroke="#986b8b" stroke-width="2" transform="rotate(-17 38 29)"/>
+ <ellipse cx="82" cy="29" rx="12" ry="27" fill="${main}" stroke="#986b8b" stroke-width="2" transform="rotate(17 82 29)"/>`:
+ item.series===3?
+ `<path d="M24 51 L30 14 L51 33 L69 33 L90 14 L96 51" fill="${main}" stroke="#986b8b" stroke-width="3"/>`:"";
+ let body="";
+ if(item.series===2){
+  body=`<path d="M32 50 Q60 24 88 50 L82 99 Q60 112 38 99Z" fill="${accent}" stroke="#986b8b" stroke-width="3"/>
+  <path d="M29 53 Q22 29 45 27 Q60 10 75 27 Q98 30 91 53Z" fill="#fff4ec" stroke="#986b8b" stroke-width="3"/>
+  <circle cx="60" cy="24" r="10" fill="#e97d98"/>
+  <circle cx="52" cy="66" r="3" fill="#78536a"/><circle cx="68" cy="66" r="3" fill="#78536a"/>
+  <path d="M56 76 Q60 81 64 76" fill="none" stroke="#78536a" stroke-width="2"/>`;
+ }else{
+  body=`${head}<path d="${item.series===1?"M22 69 Q22 27 60 26 Q98 27 98 69 L94 101 L81 93 L69 102 L57 93 L43 102 L30 93 L22 101Z":"M20 64 Q20 29 60 29 Q100 29 100 64 Q100 103 60 105 Q20 103 20 64Z"}"
+  fill="${main}" stroke="#986b8b" stroke-width="3"/>
+  <ellipse cx="42" cy="77" rx="8" ry="5" fill="#f8b0c5"/>
+  <ellipse cx="78" cy="77" rx="8" ry="5" fill="#f8b0c5"/>
+  <ellipse cx="48" cy="65" rx="3" ry="5" fill="#65485d"/>
+  <ellipse cx="72" cy="65" rx="3" ry="5" fill="#65485d"/>
+  <path d="M56 76 Q60 82 64 76" fill="none" stroke="#65485d" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M47 39 Q60 26 73 39 L60 50Z" fill="${accent}"/>`;
+ }
+ return `<svg viewBox="0 0 120 120" aria-hidden="true">
+ <ellipse cx="60" cy="111" rx="36" ry="5" fill="#a8799b33"/>
+ ${body}
+ <path d="M60 12 L64 21 L74 22 L66 29 L68 39 L60 34 L52 39 L54 29 L46 22 L56 21Z" fill="#fff7c9" stroke="#d4ac72" stroke-width="1.5" transform="translate(25 -3) scale(.6)"/>
+ </svg>`;
+}
+function itemCard(item,mode){
+ const n=count(item.id),found=!!state.discovered[item.id];
+ const locked=mode==="collection"&&!found;
+ const r=RARITIES[item.rarity];
+ return `<div class="item ${locked?"locked":""}">
+ <div class="art">${svgArt(item)}</div>
+ <strong>${locked?"？？？":item.name}</strong>
+ <small style="color:${r.color}">${locked?"未発見":r.name}</small>
+ <small>${mode==="collection"?"所持 "+n+"個":"所持 "+n+"個"}</small>
+ ${mode==="sell"&&n>0?`<button data-sell="${item.id}">売却 +${r.sell}</button>`:""}
+ </div>`;
+}
+function showPage(p){
+ if(busy)return;
+ page=p;
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.page===p));
+ render();
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+function render(){
+ save();
+ const app=$("app");
+ if(page==="gacha"){
+  app.innerHTML=`<div class="panel">
+   <h1>♡ GACHA COLLECTION ♡</h1>
+   <p class="sub">お気に入りのシリーズを選んでね</p>
+   <div class="series">${SERIES.map((s,i)=>`<button class="${i===selected?"selected":""}" data-series="${i}"><span class="symbol">${s.icon}</span>${s.name}</button>`).join("")}</div>
+   <div class="game">
+    <div class="machine-area">
+     <div class="machine" id="machine">
+      <div class="globe"><div class="balls">${Array.from({length:10},(_,i)=>`<div class="ball" style="background:${["#f8a9c9","#b5e7ef","#d4b5ef","#ffe1a9"][i%4]};left:${(i*43)%145}px;bottom:${(i*29)%90}px"></div>`).join("")}</div></div>
+      <div class="base"><div class="brand">${SERIES[selected].name}</div><div class="handle" id="handle"></div><div class="slot"></div></div>
+      <div class="machine-foot"></div>
+     </div>
+    </div>
+    <div class="controls">
+     <h2>${SERIES[selected].name}</h2>
+     <p class="sub">全${SERIES[selected].count}種類・シークレット入り</p>
+     <div class="price">✦ 300 coins</div>
+     <button class="bigbtn" id="roll" ${state.coins<300?"disabled":""}>ガチャをまわす ♡</button>
+     <p class="note">カプセルを開けて何が出るかお楽しみ！<br>ダブった景品は売却できるよ。</p>
+     <button class="btn" id="sound">効果音 ${audioOn?"ON":"OFF"}</button>
+     <button class="btn" id="reward">デイリー報酬</button>
+    </div>
+   </div></div>`;
+  document.querySelectorAll("[data-series]").forEach(b=>b.onclick=()=>{selected=Number(b.dataset.series);render()});
+  $("roll").onclick=roll;
+  $("sound").onclick=()=>{audioOn=!audioOn;tone(650);render()};
+  $("reward").onclick=reward;
+ }else if(page==="collection"){
+  const found=ITEMS.filter(x=>state.discovered[x.id]).length;
+  app.innerHTML=`<div class="panel"><h1>コレクション図鑑</h1>
+   <p class="sub">${found} / ${ITEMS.length} 種類発見</p>
+   <div class="progress"><div style="width:${found/ITEMS.length*100}%"></div></div>
+   ${SERIES.map((s,i)=>{
+    const a=ITEMS.filter(x=>x.series===i);
+    const f=a.filter(x=>state.discovered[x.id]).length;
+    return `<h2>${s.icon} ${s.name}　${f}/${a.length}</h2>
+    <div class="grid">${a.map(x=>itemCard(x,"collection")).join("")}</div>`;
+   }).join("")}</div>`;
+ }else if(page==="sell"){
+  const owned=ITEMS.filter(x=>count(x.id)>0);
+  app.innerHTML=`<div class="panel"><h1>アイテム売却</h1>
+   <p class="sub">売却すると所持数が減るよ。図鑑の発見記録は残るよ。</p>
+   ${owned.length?`<div class="grid">${owned.map(x=>itemCard(x,"sell")).join("")}</div>`:
+   `<div class="notice">まだアイテムがないよ。<br>ガチャを回して集めよう！</div>`}</div>`;
+  document.querySelectorAll("[data-sell]").forEach(b=>b.onclick=()=>sell(b.dataset.sell));
+ }else{
+  app.innerHTML=`<div class="panel"><h1>オンライン交換所</h1>
+   <div class="notice"><h2>ただいま準備中 ♡</h2>
+   <p>ほかのプレイヤーとアイテムを交換できる場所だよ。</p>
+   <p>交換募集・申請・承認・交換履歴を実装予定。</p>
+   <strong>オンライン接続前のため、現在は交換できません。</strong></div></div>`;
+ }
+}
+function modal(html){
+ $("modal").innerHTML=html;
+ $("overlay").classList.add("show");
+}
+function closeModal(){
+ $("overlay").classList.remove("show");
+ busy=false;
+ render();
+}
+function roll(){
+ if(busy||state.coins<300)return;
+ busy=true;state.coins-=300;state.total++;save();
+ const item=weightedItem(selected);
+ $("machine").classList.add("shake");
+ $("handle").classList.add("spin");
+ tone(320,.3,"triangle");
+ $("roll").disabled=true;
+ setTimeout(()=>{
+  modal(`<h2>カプセルが出てきた！</h2>
+   <div class="capsule"></div>
+   <p>何が入っているかな？</p>
+   <button class="bigbtn" id="openCapsule">カプセルを開ける</button>`);
+  $("openCapsule").onclick=()=>openCapsule(item);
+ },950);
+}
+function openCapsule(item){
+ const isNew=!state.discovered[item.id];
+ state.owned[item.id]=count(item.id)+1;
+ state.discovered[item.id]=true;
+ save();soundWin();
+ const r=RARITIES[item.rarity];
+ modal(`<div class="reveal">
+  <h2 style="color:${r.color}">${isNew?"NEW! ♡":"GET! ♡"}</h2>
+  <div class="art" style="height:175px">${svgArt(item)}</div>
+  <h2>${item.name}</h2>
+  <p>${SERIES[item.series].name}</p>
+  <h3 style="color:${r.color}">${r.name}</h3>
+  <p>所持数：${count(item.id)}個</p>
+  <button class="bigbtn" id="finish">コレクションにしまう</button>
+ </div>`);
+ $("finish").onclick=closeModal;
+}
+function sell(id){
+ const item=ITEMS.find(x=>x.id===id);
+ if(!item||count(id)<1)return;
+ const value=RARITIES[item.rarity].sell;
+ if(!confirm(`${item.name}を1個売って${value}コインを受け取る？`))return;
+ state.owned[id]=count(id)-1;
+ state.coins+=value;
+ save();tone(850,.15);render();
+}
+function reward(){
+ const today=new Date().toLocaleDateString("en-CA");
+ if(state.lastReward===today){
+  modal(`<h2>受け取り済み ♡</h2><p>今日の報酬はもう受け取ったよ！</p><button class="btn" id="ok">閉じる</button>`);
+ }else{
+  state.lastReward=today;state.coins+=500;save();soundWin();
+  modal(`<h2>デイリーボーナス！</h2><h1>+500 coins</h1><p>また明日遊びに来てね ♡</p><button class="btn" id="ok">受け取る</button>`);
+ }
+ $("ok").onclick=closeModal;
+}
+render();
+</script>
+</body>
+</html>
+
