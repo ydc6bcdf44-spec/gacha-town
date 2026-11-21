@@ -254,6 +254,13 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
 
 .dream-banner[hidden]{display:none!important}.dream-banner{position:relative;margin:0 auto 20px;max-width:1300px;border:4px solid #fff;border-radius:24px;overflow:hidden;box-shadow:0 15px 40px #7b4b9455}.dream-banner img{display:block;width:100%;height:auto}.dream-play{position:absolute;right:5%;bottom:7%;border:3px solid white;border-radius:40px;background:linear-gradient(#ffc2e4,#e56cab);color:white;font-weight:900;padding:14px 24px;box-shadow:0 5px 0 #a95092;font-size:clamp(13px,1.6vw,22px)}@media(max-width:700px){.dream-banner{border-radius:12px}.dream-play{bottom:4%;padding:8px 12px;font-size:12px}}
 .dream-hit{position:absolute;border:0;background:transparent;border-radius:18px;cursor:pointer;touch-action:manipulation}.dream-hit:hover{background:#fff2}.dream-hit:focus-visible{outline:4px solid #ffe681;background:#fff3}.dream-coins{position:absolute;right:2%;top:1%;font-weight:1000;font-size:clamp(11px,1.5vw,20px);color:#9a4b86;background:#fff9f5f2;border:2px solid #f5b5d7;border-radius:99px;padding:3px 10px;box-shadow:0 2px 8px #ac6b9944}.dream-banner img{user-select:none;pointer-events:none}@media(max-width:700px){.dream-coins{font-size:10px;padding:2px 5px}.dream-hit{border-radius:6px}}
+
+/* New illustrated home is the only gacha screen; retain inventory and trade pages */
+body.dream-home #app{display:none!important}
+body.dream-home .tabs{display:none!important}
+body:not(.dream-home) .dream-banner{display:none!important}
+body:not(.dream-home) .tabs{display:flex}
+@media(max-width:700px){body:not(.dream-home) .tabs{display:grid}}
 </style>
 </head>
 <body>
@@ -408,6 +415,7 @@ function showPage(p){
 }
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 function render(){
+ document.body.classList.toggle("dream-home",page==="gacha");
  save();
  const app=$("app");
  if(page==="gacha"){
@@ -477,10 +485,10 @@ function roll(){
  if(busy||state.coins<300)return;
  busy=true;state.coins-=300;state.total++;save();
  const item=weightedItem(selected);
- $("machine").classList.add("shake");
- $("handle").classList.add("spin");
+ if($("machine"))$("machine").classList.add("shake");
+ if($("handle"))$("handle").classList.add("spin");
  tone(320,.3,"triangle");
- $("roll").disabled=true;
+ if($("roll"))$("roll").disabled=true;
  setTimeout(()=>{
   modal(`<h2>カプセルが出てきた！</h2>
    <div class="capsule"></div>
@@ -538,7 +546,7 @@ function reward(){
 document.querySelectorAll("[data-dream]").forEach(btn=>btn.addEventListener("click",()=>{
  const action=btn.dataset.dream;
  if(["gacha","collection","sell","trade"].includes(action)){
-  showPage(action);$("app").scrollIntoView({behavior:"smooth",block:"start"});
+  showPage(action);if(action!=="gacha")$("app").scrollIntoView({behavior:"smooth",block:"start"});else window.scrollTo({top:0,behavior:"smooth"});
  }else if(action==="roll"){
   if(busy)return;
   showPage("gacha");selected=0;render();
