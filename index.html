@@ -253,6 +253,7 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
 @media(max-width:700px){header{min-height:70px}.logo{font-size:21px}.tab{font-size:12px;outline-width:1px}.controls{padding:13px 8px}.panel{padding:12px}.machine-area{min-height:340px}}
 
 .dream-banner[hidden]{display:none!important}.dream-banner{position:relative;margin:0 auto 20px;max-width:1300px;border:4px solid #fff;border-radius:24px;overflow:hidden;box-shadow:0 15px 40px #7b4b9455}.dream-banner img{display:block;width:100%;height:auto}.dream-play{position:absolute;right:5%;bottom:7%;border:3px solid white;border-radius:40px;background:linear-gradient(#ffc2e4,#e56cab);color:white;font-weight:900;padding:14px 24px;box-shadow:0 5px 0 #a95092;font-size:clamp(13px,1.6vw,22px)}@media(max-width:700px){.dream-banner{border-radius:12px}.dream-play{bottom:4%;padding:8px 12px;font-size:12px}}
+.dream-hit{position:absolute;border:0;background:transparent;border-radius:18px;cursor:pointer;touch-action:manipulation}.dream-hit:hover{background:#fff2}.dream-hit:focus-visible{outline:4px solid #ffe681;background:#fff3}.dream-coins{position:absolute;right:2%;top:1%;font-weight:1000;font-size:clamp(11px,1.5vw,20px);color:#9a4b86;background:#fff9f5f2;border:2px solid #f5b5d7;border-radius:99px;padding:3px 10px;box-shadow:0 2px 8px #ac6b9944}.dream-banner img{user-select:none;pointer-events:none}@media(max-width:700px){.dream-coins{font-size:10px;padding:2px 5px}.dream-hit{border-radius:6px}}
 </style>
 </head>
 <body>
@@ -267,7 +268,20 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
   <button class="tab" data-page="sell">売却</button>
   <button class="tab" data-page="trade">交換所</button>
  </nav>
- <section class="dream-banner" id="dreamBanner" hidden><img src="gacha-dream.png" alt="GACHA TOWN 姫系デザイン" onload="document.getElementById('dreamBanner').hidden=false" onerror="document.getElementById('dreamBanner').hidden=true"><button class="dream-play" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">ガチャを遊ぶ ♡</button></section><main id="app"></main>
+ <section class="dream-banner" id="dreamBanner" hidden>
+<img src="gacha-dream.png" alt="GACHA TOWN 姫系ガチャ画面" onload="document.getElementById('dreamBanner').hidden=false" onerror="document.getElementById('dreamBanner').hidden=true">
+<div class="dream-coins" aria-live="polite">✦ <span id="dreamCoins">1,500</span></div>
+<button class="dream-hit" style="left:16%;top:13%;width:15%;height:8%" data-dream="gacha" aria-label="ガチャ画面"></button>
+<button class="dream-hit" style="left:31%;top:13%;width:15%;height:8%" data-dream="collection" aria-label="図鑑を開く"></button>
+<button class="dream-hit" style="left:46%;top:13%;width:14%;height:8%" data-dream="sell" aria-label="売却を開く"></button>
+<button class="dream-hit" style="left:60%;top:13%;width:14%;height:8%" data-dream="trade" aria-label="交換所を開く"></button>
+<button class="dream-hit" style="left:70%;top:65%;width:21%;height:10%" data-dream="roll" aria-label="ガチャを300コインで回す"></button>
+<button class="dream-hit" style="left:26%;top:88%;width:15%;height:10%" data-dream="reward" aria-label="デイリーボーナスを受け取る"></button>
+<button class="dream-hit" style="left:69%;top:88%;width:15%;height:10%" data-dream="work" aria-label="お手伝いで150コイン獲得"></button>
+<button class="dream-hit" style="left:41%;top:88%;width:14%;height:10%" data-dream="video" aria-label="動画報酬は準備中"></button>
+<button class="dream-hit" style="left:55%;top:88%;width:14%;height:10%" data-dream="missions" aria-label="ミッションは準備中"></button>
+<button class="dream-hit" style="left:84%;top:88%;width:15%;height:10%" data-dream="bonus" aria-label="ガチャ5回ボーナスの説明"></button>
+</section><main id="app"></main>
 </div>
 <div id="overlay" class="overlay" role="dialog" aria-modal="true">
  <div class="modal" id="modal"></div>
@@ -316,6 +330,7 @@ function save(){
  try{localStorage.setItem(KEY,JSON.stringify(state))}
  catch(e){console.warn("保存できませんでした",e)}
  $("coins").textContent=fmt(state.coins);
+ if($("dreamCoins"))$("dreamCoins").textContent=fmt(state.coins);
 }
 function tone(freq=500,duration=.12,type="sine"){
  if(!audioOn)return;
@@ -520,6 +535,20 @@ function reward(){
  }
  $("ok").onclick=closeModal;
 }
+document.querySelectorAll("[data-dream]").forEach(btn=>btn.addEventListener("click",()=>{
+ const action=btn.dataset.dream;
+ if(["gacha","collection","sell","trade"].includes(action)){
+  showPage(action);$("app").scrollIntoView({behavior:"smooth",block:"start"});
+ }else if(action==="roll"){
+  if(busy)return;
+  showPage("gacha");selected=0;render();
+  if(state.coins<300){modal('<h2>コインが足りないよ ♡</h2><p>下のお手伝いやデイリー報酬でコインを集めよう！</p><button class="btn" id="ok">閉じる</button>');$("ok").onclick=closeModal;return;}
+  roll();
+ }else if(action==="reward")reward();
+ else if(action==="work")workForCoins();
+ else if(action==="bonus"){modal('<h2>ガチャ5回ボーナス ♡</h2><p>ガチャを5回回すごとに250コインが自動でもらえるよ！</p><button class="btn" id="ok">閉じる</button>');$("ok").onclick=closeModal;}
+ else{modal('<h2>ただいま準備中 ♡</h2><p>この機能はまだ利用できないよ。</p><button class="btn" id="ok">閉じる</button>');$("ok").onclick=closeModal;}
+}));
 render();
 </script>
 </body>
