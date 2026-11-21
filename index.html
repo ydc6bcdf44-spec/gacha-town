@@ -257,6 +257,22 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
 
 /* New illustrated home is the only gacha screen; retain inventory and trade pages */
 body.dream-home #app{display:none!important}
+.dream-toolbar{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;background:linear-gradient(90deg,#f7d5ed,#fdf0fb,#dfd2f4);padding:12px;color:#94587e;font-weight:900;border-top:2px solid white}
+.dream-toolbar button{border:2px solid #fff8ff;border-radius:99px;padding:9px 15px;color:#985782;background:linear-gradient(#fffdfd,#ffe3f4);box-shadow:0 3px 8px #9f66932d;font-weight:900}
+.dream-toolbar button:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.dream-toolbar button:active{transform:translateY(2px)}
+.dream-banner .dream-hit:active{background:#fff5;box-shadow:0 0 20px 8px #fff9}
+body:not(.dream-home) header{background:linear-gradient(90deg,#ffe8f5,#efe4fc);border-bottom:3px solid white}
+body:not(.dream-home) .wallet{background:linear-gradient(#fff,#ffebf8);box-shadow:0 3px 8px #b878a02a}
+body:not(.dream-home) .shell{max-width:1200px}
+body:not(.dream-home) .grid{margin-bottom:25px}
+.overlay{backdrop-filter:blur(7px)}
+.modal{position:relative;background:linear-gradient(145deg,#fffefd,#fff0f9 55%,#eee4ff);border:5px solid #fff;box-shadow:0 20px 80px #4d2b5e80,inset 0 0 0 3px #f5c4df;max-height:92dvh;overflow:auto;animation:modalIn .32s cubic-bezier(.2,.8,.2,1) both}
+@keyframes modalIn{from{opacity:0;transform:translateY(25px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal h2{color:#c46c9f;text-shadow:0 2px white}
+.modal .bigbtn{background:linear-gradient(180deg,#f8b7d6,#df80b7 60%,#bf6ba8);border:2px solid white;box-shadow:0 5px 0 #ac5c91,0 8px 16px #a9699a4a}
+@media(max-width:700px){.dream-toolbar{gap:5px;padding:8px 3px;font-size:11px}.dream-toolbar button{font-size:11px;padding:7px 9px}}
+
 body.dream-home header{display:none!important}
 body.dream-home .shell{max-width:1500px;padding:0 8px}
 body.dream-home footer{display:none!important}
@@ -320,7 +336,7 @@ body:not(.dream-home) .tabs{display:flex}
 <button class="dream-hit" style="left:41%;top:88%;width:14%;height:10%" data-dream="video" aria-label="動画報酬は準備中"></button>
 <button class="dream-hit" style="left:55%;top:88%;width:14%;height:10%" data-dream="missions" aria-label="ミッションは準備中"></button>
 <button class="dream-hit" style="left:84%;top:88%;width:15%;height:10%" data-dream="bonus" aria-label="ガチャ5回ボーナスの説明"></button>
-<div class="dream-selection" aria-label="ガチャシリーズ選択"><span class="dream-selection-label">♡ ガチャシリーズを選ぶ ♡</span><div id="dreamSeries"></div></div><div class="dream-status" id="dreamStatus" aria-live="polite"></div><div class="dream-capsule-fx" id="dreamCapsuleFx" aria-hidden="true"><span></span></div></section><main id="app"></main>
+<div class="dream-toolbar"><button type="button" id="dreamSound" aria-label="効果音の切り替え">♪ 音 ON</button><span id="dreamProgress">コレクション 0 / 44</span><button type="button" id="dreamCollection">♡ 図鑑を見る</button></div><div class="dream-selection" aria-label="ガチャシリーズ選択"><span class="dream-selection-label">♡ ガチャシリーズを選ぶ ♡</span><div id="dreamSeries"></div></div><div class="dream-status" id="dreamStatus" aria-live="polite"></div><div class="dream-capsule-fx" id="dreamCapsuleFx" aria-hidden="true"><span></span></div></section><main id="app"></main>
 </div>
 <div id="overlay" class="overlay" role="dialog" aria-modal="true">
  <div class="modal" id="modal"></div>
@@ -447,6 +463,8 @@ function showPage(p){
 }
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 function render(){
+ const soundToggle=document.getElementById("dreamSound");if(soundToggle){soundToggle.textContent=audioOn?"♪ 音 ON":"♪ 音 OFF";soundToggle.setAttribute("aria-pressed",String(audioOn));}
+ const progressLabel=document.getElementById("dreamProgress");if(progressLabel)progressLabel.textContent="♡ コレクション "+ITEMS.filter(x=>state.discovered[x.id]).length+" / "+ITEMS.length;
  const dreamSeries=document.getElementById("dreamSeries");
  if(dreamSeries){dreamSeries.innerHTML=SERIES.map((x,i)=>'<button data-pick="'+i+'" aria-pressed="'+(selected===i)+'">'+x.name+'</button>').join("");dreamSeries.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{if(busy)return;selected=Number(b.dataset.pick);render();tone(680,.07);});}
  const dreamStatus=document.getElementById("dreamStatus");if(dreamStatus)dreamStatus.textContent=SERIES[selected].name+" · 300 coins";
@@ -514,10 +532,12 @@ function modal(html){
 function closeModal(){
  $("overlay").classList.remove("show");
  busy=false;
+ const rollHit=document.querySelector("[data-dream=roll]");if(rollHit)rollHit.disabled=false;
  render();
 }
 function roll(){
  if(busy||state.coins<300)return;
+ const rollHit=document.querySelector("[data-dream=roll]");if(rollHit)rollHit.disabled=true;
  busy=true;state.coins-=300;state.total++;save();
  const item=weightedItem(selected);
  if($("machine"))$("machine").classList.add("shake");
@@ -579,6 +599,9 @@ function reward(){
  }
  $("ok").onclick=closeModal;
 }
+document.getElementById("dreamSound").addEventListener("click",()=>{audioOn=!audioOn;if(audioOn)tone(720,.12);render();});
+document.getElementById("dreamCollection").addEventListener("click",()=>{showPage("collection");$("app").scrollIntoView({behavior:"smooth",block:"start"});});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("overlay").classList.contains("show")&&!busy)closeModal();});
 document.querySelectorAll("[data-dream]").forEach(btn=>btn.addEventListener("click",()=>{
  const action=btn.dataset.dream;
  if(["gacha","collection","sell","trade"].includes(action)){
