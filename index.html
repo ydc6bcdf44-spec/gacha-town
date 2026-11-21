@@ -257,6 +257,15 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
 
 /* New illustrated home is the only gacha screen; retain inventory and trade pages */
 body.dream-home #app{display:none!important}
+.dream-atmosphere{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:3}
+.float-petal{position:absolute;top:-8%;width:12px;height:18px;border-radius:90% 0 90% 0;background:linear-gradient(140deg,#fffdfb,#ffb9e5);box-shadow:0 0 12px #ffeffb;opacity:0;animation:petalDrift 12s linear infinite}
+.p1{left:8%;animation-delay:-2s;animation-duration:12s}.p2{left:23%;animation-delay:-8s;animation-duration:15s}.p3{left:42%;animation-delay:-5s;animation-duration:11s}.p4{left:62%;animation-delay:-11s;animation-duration:16s}.p5{left:78%;animation-delay:-4s;animation-duration:13s}.p6{left:93%;animation-delay:-9s;animation-duration:14s}
+@keyframes petalDrift{0%{transform:translate3d(-10px,-30px,0) rotate(0);opacity:0}10%{opacity:.85}80%{opacity:.7}100%{transform:translate3d(55px,95vh,0) rotate(560deg);opacity:0}}
+.dream-banner:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(110deg,transparent 20%,#fff4 48%,transparent 70%);background-size:250% 100%;animation:softSheen 12s ease-in-out infinite}
+@keyframes softSheen{0%,70%,100%{background-position:100% 0;opacity:0}78%{opacity:.45}90%{background-position:-100% 0;opacity:0}}
+.dream-selection button:focus-visible,.dream-toolbar button:focus-visible{outline:3px solid #a67ae8;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.float-petal,.dream-banner:after{animation:none!important}}
+
 body.dream-home .subpage-nav{display:none!important}
 .subpage-nav{text-align:center;margin:0 0 15px}
 .subpage-nav button{padding:13px 25px;border-radius:99px;border:3px solid white;background:linear-gradient(#f8b2d7,#d18fca);color:white;font-weight:900;box-shadow:0 5px 0 #b06c9d,0 9px 18px #a45e8d44;transition:transform .15s}
@@ -330,7 +339,7 @@ body:not(.dream-home) .tabs{display:flex}
  </nav>
  <section class="dream-banner" id="dreamBanner" hidden>
 <img src="gacha-dream.png" alt="GACHA TOWN 姫系ガチャ画面" onload="document.getElementById('dreamBanner').hidden=false" onerror="document.getElementById('dreamBanner').hidden=true">
-<div class="dream-sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="dream-coins" aria-live="polite">✦ <span id="dreamCoins">1,500</span></div>
+<div class="dream-atmosphere" aria-hidden="true"><span class="float-petal p1"></span><span class="float-petal p2"></span><span class="float-petal p3"></span><span class="float-petal p4"></span><span class="float-petal p5"></span><span class="float-petal p6"></span></div><div class="dream-sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="dream-coins" aria-live="polite">✦ <span id="dreamCoins">1,500</span></div>
 <button class="dream-hit" style="left:16%;top:13%;width:15%;height:8%" data-dream="gacha" aria-label="ガチャ画面"></button>
 <button class="dream-hit" style="left:31%;top:13%;width:15%;height:8%" data-dream="collection" aria-label="図鑑を開く"></button>
 <button class="dream-hit" style="left:46%;top:13%;width:14%;height:8%" data-dream="sell" aria-label="売却を開く"></button>
