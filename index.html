@@ -257,6 +257,38 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
 
 /* New illustrated home is the only gacha screen; retain inventory and trade pages */
 body.dream-home #app{display:none!important}
+body.dream-home header{display:none!important}
+body.dream-home .shell{max-width:1500px;padding:0 8px}
+body.dream-home footer{display:none!important}
+body.dream-home .dream-banner{border:0;border-radius:0;box-shadow:0 18px 70px #a770a54d;max-width:1400px;margin:0 auto}
+body.dream-home .dream-banner>img{width:100%;display:block}
+body.dream-home{background:radial-gradient(ellipse at 50% 0,#fff7fa,#eddcf6 60%,#d4c1e9)}
+body:not(.dream-home) .panel{background:linear-gradient(150deg,#fffdfef5,#fff1f9f0 58%,#f3eafaef);border:3px solid #fff4fa;box-shadow:0 12px 30px #b581a34d,inset 0 0 0 2px #f4c7df}
+body:not(.dream-home) .item{background:linear-gradient(#fff,#fff0f8);border:3px double #eab4d0;box-shadow:0 5px 15px #b985a62a;transition:transform .2s}
+body:not(.dream-home) .item:hover{transform:translateY(-4px)}
+body:not(.dream-home) .tab{background:linear-gradient(#fffdfd,#ffe6f4);border:2px solid #f0bbd6}
+body:not(.dream-home) .tab.active{background:linear-gradient(#f5a5d4,#c5a4ec);color:white}
+.dream-sparkles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2}
+.dream-sparkles i{position:absolute;width:10px;height:10px;left:var(--x);top:var(--y);background:#fffef3;transform:rotate(45deg);box-shadow:0 0 13px 5px #fff6e4,0 0 25px 8px #ffb7ea;animation:dreamTwinkle var(--t) ease-in-out infinite alternate;animation-delay:var(--d)}
+.dream-sparkles i:nth-child(1){--x:8%;--y:22%;--t:2.2s;--d:-.5s}.dream-sparkles i:nth-child(2){--x:28%;--y:42%;--t:3s;--d:-1s}.dream-sparkles i:nth-child(3){--x:52%;--y:13%;--t:2.7s;--d:-1.6s}.dream-sparkles i:nth-child(4){--x:79%;--y:28%;--t:3.4s;--d:-.9s}.dream-sparkles i:nth-child(5){--x:92%;--y:64%;--t:2.1s;--d:-1.7s}.dream-sparkles i:nth-child(6){--x:18%;--y:75%;--t:2.8s;--d:-2.1s}.dream-sparkles i:nth-child(7){--x:67%;--y:81%;--t:3.1s;--d:-.4s}.dream-sparkles i:nth-child(8){--x:42%;--y:59%;--t:2.4s;--d:-1.3s}
+@keyframes dreamTwinkle{0%{opacity:.15;transform:scale(.2) rotate(0)}100%{opacity:.95;transform:scale(1.3) rotate(90deg)}}
+.dream-banner .dream-hit[data-dream=roll]{animation:dreamPulse 2.6s ease-in-out infinite;box-shadow:0 0 0 0 #fff0}
+@keyframes dreamPulse{50%{box-shadow:0 0 26px 10px #ffe1f37a;background:#fff2}}
+.dream-banner.is-rolling>img{animation:dreamRoll .85s ease-in-out}
+@keyframes dreamRoll{15%,45%,75%{transform:translateX(-3px)}30%,60%{transform:translateX(3px)}100%{transform:translateX(0)}}
+.dream-selection{position:relative;z-index:4;text-align:center;padding:12px 12px 18px;background:linear-gradient(100deg,#f6d3ee,#fff3fb,#e5d3fa);border-top:3px solid #fff7fd}
+.dream-selection-label{display:block;font-weight:900;color:#ad619b;font-size:clamp(12px,1.5vw,17px);margin-bottom:8px}
+#dreamSeries{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+#dreamSeries button{border:2px solid #f7c3df;background:linear-gradient(#fff,#ffebf6);border-radius:30px;padding:9px 14px;color:#9a5d91;font-weight:900;box-shadow:0 3px 0 #d5a7c6;transition:transform .2s,background .2s}
+#dreamSeries button[aria-pressed=true]{background:linear-gradient(#f9a5d5,#c6a5e8);color:white;border-color:#fff;transform:translateY(-2px);box-shadow:0 4px 13px #c181b777}
+.dream-status{position:absolute;z-index:5;right:7%;top:77%;font-size:clamp(10px,1.4vw,19px);font-weight:900;color:#a45c92;text-shadow:0 2px white;pointer-events:none}
+.dream-capsule-fx{display:none;position:absolute;z-index:8;left:48%;top:41%;width:15%;aspect-ratio:1;pointer-events:none}
+.dream-capsule-fx span{display:block;width:100%;height:100%;border:6px solid white;border-radius:50%;background:linear-gradient(#ff9bc6 0 48%,#fff7fa 49% 52%,#c5a6f1 53%);box-shadow:inset -10px -10px 15px #995f9b55,0 12px 30px #7c4c8d77}
+.dream-banner.is-rolling .dream-capsule-fx{display:block;animation:dreamDrop .95s cubic-bezier(.2,.8,.3,1) both}
+@keyframes dreamDrop{0%{opacity:0;transform:translateY(-75%) scale(.3) rotate(-45deg)}45%{opacity:1}75%{transform:translateY(85%) scale(1) rotate(340deg)}100%{opacity:0;transform:translateY(120%) scale(.8) rotate(400deg)}}
+@media(prefers-reduced-motion:reduce){.dream-sparkles i,.dream-banner .dream-hit[data-dream=roll],.dream-banner.is-rolling>img,.dream-banner.is-rolling .dream-capsule-fx{animation:none!important}}
+@media(max-width:700px){body.dream-home .shell{padding:0}#dreamSeries button{padding:8px 10px;font-size:12px}.dream-selection{padding:9px 4px 12px}.dream-status{top:79%}}
+
 body.dream-home .tabs{display:none!important}
 body:not(.dream-home) .dream-banner{display:none!important}
 body:not(.dream-home) .tabs{display:flex}
@@ -277,7 +309,7 @@ body:not(.dream-home) .tabs{display:flex}
  </nav>
  <section class="dream-banner" id="dreamBanner" hidden>
 <img src="gacha-dream.png" alt="GACHA TOWN 姫系ガチャ画面" onload="document.getElementById('dreamBanner').hidden=false" onerror="document.getElementById('dreamBanner').hidden=true">
-<div class="dream-coins" aria-live="polite">✦ <span id="dreamCoins">1,500</span></div>
+<div class="dream-sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="dream-coins" aria-live="polite">✦ <span id="dreamCoins">1,500</span></div>
 <button class="dream-hit" style="left:16%;top:13%;width:15%;height:8%" data-dream="gacha" aria-label="ガチャ画面"></button>
 <button class="dream-hit" style="left:31%;top:13%;width:15%;height:8%" data-dream="collection" aria-label="図鑑を開く"></button>
 <button class="dream-hit" style="left:46%;top:13%;width:14%;height:8%" data-dream="sell" aria-label="売却を開く"></button>
@@ -288,7 +320,7 @@ body:not(.dream-home) .tabs{display:flex}
 <button class="dream-hit" style="left:41%;top:88%;width:14%;height:10%" data-dream="video" aria-label="動画報酬は準備中"></button>
 <button class="dream-hit" style="left:55%;top:88%;width:14%;height:10%" data-dream="missions" aria-label="ミッションは準備中"></button>
 <button class="dream-hit" style="left:84%;top:88%;width:15%;height:10%" data-dream="bonus" aria-label="ガチャ5回ボーナスの説明"></button>
-</section><main id="app"></main>
+<div class="dream-selection" aria-label="ガチャシリーズ選択"><span class="dream-selection-label">♡ ガチャシリーズを選ぶ ♡</span><div id="dreamSeries"></div></div><div class="dream-status" id="dreamStatus" aria-live="polite"></div><div class="dream-capsule-fx" id="dreamCapsuleFx" aria-hidden="true"><span></span></div></section><main id="app"></main>
 </div>
 <div id="overlay" class="overlay" role="dialog" aria-modal="true">
  <div class="modal" id="modal"></div>
@@ -415,6 +447,9 @@ function showPage(p){
 }
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 function render(){
+ const dreamSeries=document.getElementById("dreamSeries");
+ if(dreamSeries){dreamSeries.innerHTML=SERIES.map((x,i)=>'<button data-pick="'+i+'" aria-pressed="'+(selected===i)+'">'+x.name+'</button>').join("");dreamSeries.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{if(busy)return;selected=Number(b.dataset.pick);render();tone(680,.07);});}
+ const dreamStatus=document.getElementById("dreamStatus");if(dreamStatus)dreamStatus.textContent=SERIES[selected].name+" · 300 coins";
  document.body.classList.toggle("dream-home",page==="gacha");
  save();
  const app=$("app");
@@ -488,6 +523,7 @@ function roll(){
  if($("machine"))$("machine").classList.add("shake");
  if($("handle"))$("handle").classList.add("spin");
  tone(320,.3,"triangle");
+ const dreamBanner=document.getElementById("dreamBanner");if(dreamBanner){dreamBanner.classList.remove("is-rolling");void dreamBanner.offsetWidth;dreamBanner.classList.add("is-rolling");setTimeout(()=>dreamBanner.classList.remove("is-rolling"),1050);}
  if($("roll"))$("roll").disabled=true;
  setTimeout(()=>{
   modal(`<h2>カプセルが出てきた！</h2>
@@ -549,7 +585,7 @@ document.querySelectorAll("[data-dream]").forEach(btn=>btn.addEventListener("cli
   showPage(action);if(action!=="gacha")$("app").scrollIntoView({behavior:"smooth",block:"start"});else window.scrollTo({top:0,behavior:"smooth"});
  }else if(action==="roll"){
   if(busy)return;
-  showPage("gacha");selected=0;render();
+  showPage("gacha");render();
   if(state.coins<300){modal('<h2>コインが足りないよ ♡</h2><p>下のお手伝いやデイリー報酬でコインを集めよう！</p><button class="btn" id="ok">閉じる</button>');$("ok").onclick=closeModal;return;}
   roll();
  }else if(action==="reward")reward();
