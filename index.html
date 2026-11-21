@@ -252,6 +252,7 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
 .modal{background:linear-gradient(#fff,#fbe5f5);border:6px double #fff;outline:3px solid #e5acd2}
 @media(max-width:700px){header{min-height:70px}.logo{font-size:21px}.tab{font-size:12px;outline-width:1px}.controls{padding:13px 8px}.panel{padding:12px}.machine-area{min-height:340px}}
 
+.dream-banner[hidden]{display:none!important}.dream-banner{position:relative;margin:0 auto 20px;max-width:1300px;border:4px solid #fff;border-radius:24px;overflow:hidden;box-shadow:0 15px 40px #7b4b9455}.dream-banner img{display:block;width:100%;height:auto}.dream-play{position:absolute;right:5%;bottom:7%;border:3px solid white;border-radius:40px;background:linear-gradient(#ffc2e4,#e56cab);color:white;font-weight:900;padding:14px 24px;box-shadow:0 5px 0 #a95092;font-size:clamp(13px,1.6vw,22px)}@media(max-width:700px){.dream-banner{border-radius:12px}.dream-play{bottom:4%;padding:8px 12px;font-size:12px}}
 </style>
 </head>
 <body>
@@ -266,7 +267,7 @@ h1{color:#ad5d9e;font-family:Georgia,serif;text-shadow:2px 2px #fff,0 0 14px #ff
   <button class="tab" data-page="sell">売却</button>
   <button class="tab" data-page="trade">交換所</button>
  </nav>
- <main id="app"></main>
+ <section class="dream-banner" id="dreamBanner" hidden><img src="gacha-dream.png" alt="GACHA TOWN 姫系デザイン" onload="document.getElementById('dreamBanner').hidden=false" onerror="document.getElementById('dreamBanner').hidden=true"><button class="dream-play" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">ガチャを遊ぶ ♡</button></section><main id="app"></main>
 </div>
 <div id="overlay" class="overlay" role="dialog" aria-modal="true">
  <div class="modal" id="modal"></div>
