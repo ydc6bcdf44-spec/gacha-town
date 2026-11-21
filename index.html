@@ -226,6 +226,7 @@ h1{font-family:Georgia,serif;letter-spacing:1px;text-shadow:2px 2px #fff}
 .handle{border-color:#fff4fc;box-shadow:0 4px 0 #a85b88,0 0 0 4px #edb1ce}
 .slot{border:8px ridge #ffe5f2;box-shadow:inset 0 9px 8px #573348,0 2px 6px #a66589}
 .art svg{filter:drop-shadow(2px 7px 3px #8a6a8a33)}
+.featured-art{height:135px;margin:0 auto 12px;display:flex;justify-content:center;align-items:center}.featured-art img{height:100%;width:auto;max-width:100%;filter:drop-shadow(0 6px 10px #bf83a755)}.featured-placeholder{font-size:42px;color:#e7a0c9}
 </style>
 </head>
 <body>
@@ -314,6 +315,7 @@ function weightedItem(si){
  return pool[pool.length-1];
 }
 function svgArt(item){
+ if(item.id==="0-0")return '<img src="assets/strawberry-bunny.svg" alt="いちごミルクのうさぎ" style="width:100%;height:100%;object-fit:contain" loading="lazy">';
  const s=SERIES[item.series],hue=(item.index*37)%360;
  const accent=`hsl(${hue} 70% 78%)`;
  const main=s.color;
@@ -383,7 +385,7 @@ function render(){
     <div class="controls">
      <h2>${SERIES[selected].name}</h2>
      <p class="sub">全${SERIES[selected].count}種類・シークレット入り</p>
-     <div class="price">✦ 300 coins</div>
+     <div class="featured-art">${selected===0?'<img src="assets/strawberry-bunny.svg" alt="いちごうさぎの専用イラスト">':'<span class="featured-placeholder">✦ ♡ ✦</span>'}</div><div class="price">✦ 300 coins</div>
      <button class="bigbtn" id="roll" ${state.coins<300?"disabled":""}>ガチャをまわす ♡</button>
      <p class="note">カプセルを開けて何が出るかお楽しみ！<br>ダブった景品は売却できるよ。</p>
      <button class="btn" id="sound">効果音 ${audioOn?"ON":"OFF"}</button>
